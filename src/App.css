@@ -1,38 +1,110 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  background-color: #121212;
+  color: #ffffff;
+  margin: 0;
+  padding: 20px;
+}
+
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  text-align: center;
+  margin-bottom: 40px;
+  border-bottom: 1px solid #282828;
+  padding-bottom: 20px;
+}
+
+.App-header h1 {
+  font-size: 2.5rem;
+  color: #1DB954; /* Verde Spotify */
+}
+
+/* Formulário de Importação */
+.import-form {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  margin-bottom: 40px;
+  gap: 10px;
 }
 
-.App-link {
-  color: #61dafb;
+.import-input {
+  width: 50%;
+  padding: 12px 15px;
+  border-radius: 50px;
+  border: 1px solid #535353;
+  background-color: #282828;
+  color: #ffffff;
+  font-size: 1rem;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.import-button {
+  padding: 12px 25px;
+  border-radius: 50px;
+  border: none;
+  background-color: #1DB954;
+  color: #ffffff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.import-button:hover {
+  background-color: #1ed760;
+}
+
+/* Container de Cards */
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  justify-content: center;
+}
+
+/* Card Individual */
+.card {
+  background-color: #181818;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  transition: background-color 0.3s;
+}
+
+.card:hover {
+  background-color: #282828;
+}
+
+.card-image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 15px;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  margin: 0 0 5px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-artist {
+  font-size: 0.9rem;
+  color: #b3b3b3;
+  margin: 0 0 10px 0;
+}
+
+.card-date {
+  font-size: 0.8rem;
+  color: #b3b3b3;
+  margin: 0;
 }
