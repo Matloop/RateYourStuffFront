@@ -1,9 +1,10 @@
 import React from 'react';
 
-// Recebe os dados de um único álbum como 'props'
-function AlbumCard({ album }) {
+// Agora recebe 'onAlbumSelect' como uma prop
+function AlbumCard({ album, onAlbumSelect }) {
   return (
-    <div className="card">
+    // Adiciona o evento onClick ao card inteiro
+    <div className="card" onClick={() => onAlbumSelect(album)}>
       <img src={album.imageUrl} alt={`Capa do álbum ${album.name}`} className="card-image" />
       <div className="card-content">
         <h2 className="card-title">{album.name}</h2>

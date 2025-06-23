@@ -1,8 +1,8 @@
 import React from 'react';
 import AlbumCard from './AlbumCard';
 
-// Recebe a lista de álbuns como 'props'
-function AlbumList({ albums }) {
+// Agora recebe 'onAlbumSelect' como uma prop
+function AlbumList({ albums, onAlbumSelect }) {
   if (!albums || albums.length === 0) {
     return <p>Nenhum álbum encontrado. Importe um novo álbum para começar!</p>;
   }
@@ -10,8 +10,8 @@ function AlbumList({ albums }) {
   return (
     <div className="cards-container">
       {albums.map((album) => (
-        // A 'key' é essencial para o React otimizar a renderização de listas
-        <AlbumCard key={album.id} album={album} />
+        // Passa a função 'onAlbumSelect' para cada card
+        <AlbumCard key={album.id} album={album} onAlbumSelect={onAlbumSelect} />
       ))}
     </div>
   );
