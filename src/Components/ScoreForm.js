@@ -1,29 +1,31 @@
 import React, { useState } from 'react';
+import { useAuth } from '../context/AuthContext'; // Importa o hook de autenticação
 
-// CORREÇÃO: Recebe 'albumSpotifyId' como prop
 const ScoreForm = ({ albumSpotifyId, onSubmit }) => {
   const [value, setValue] = useState(50);
   const [reviewText, setReviewText] = useState('');
+  const { user } = useAuth(); // Pega os dados do usuário logado
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!albumSpotifyId) {
-        alert("Erro: ID do álbum não encontrado.");
+    if (!user) {
+        alert("Você precisa estar logado para avaliar.");
         return;
     }
     
-    // O objeto de dados que será enviado como JSON para o backend
+    // Monta o objeto de dados para enviar ao backend
     const scoreData = {
       value: parseInt(value, 10),
       reviewText,
-      // CORREÇÃO: O nome do campo agora é 'spotifyAlbumId' e ele usa o valor recebido via props
+      // CORREÇÃO: O nome do campo é 'spotifyAlbumId' e usa a prop recebida.
       spotifyAlbumId: albumSpotifyId, 
-      userId: 1, // Mantendo o usuário fixo para teste
+      // CORREÇÃO: Usa o ID do usuário logado do contexto, em vez de um valor fixo.
+      userId: user.id, 
     };
     
     onSubmit(scoreData);
     setReviewText('');
-    setValue(50); // Opcional: reseta o slider
+    setValue(50);
   };
 
   return (

@@ -1,110 +1,342 @@
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  background-color: #121212;
-  color: #ffffff;
-  margin: 0;
-  padding: 20px;
+/* --- Reset Básico e Variáveis de Cor --- */
+:root {
+  --background: #121212;
+  --surface-1: #181818;
+  --surface-2: #282828;
+  --primary: #1DB954; /* Verde Spotify */
+  --primary-hover: #1ED760;
+  --text-primary: #FFFFFF;
+  --text-secondary: #B3B3B3;
+  --border-color: #333333;
 }
 
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease;
+}
+
+/* --- Layout Principal --- */
 .App {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 40px 24px;
 }
 
 .App-header {
   text-align: center;
-  margin-bottom: 40px;
-  border-bottom: 1px solid #282828;
-  padding-bottom: 20px;
+  margin-bottom: 60px;
 }
 
 .App-header h1 {
-  font-size: 2.5rem;
-  color: #1DB954; /* Verde Spotify */
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: -1.5px;
+  color: var(--primary);
+  margin: 0;
 }
 
-/* Formulário de Importação */
+/* --- Formulário de Importação com Estilo --- */
 .import-form {
   display: flex;
   justify-content: center;
-  margin-bottom: 40px;
-  gap: 10px;
+  align-items: center;
+  margin-bottom: 60px;
+  gap: 12px;
 }
 
 .import-input {
-  width: 50%;
-  padding: 12px 15px;
+  flex-grow: 1;
+  max-width: 600px;
+  padding: 14px 20px;
   border-radius: 50px;
-  border: 1px solid #535353;
-  background-color: #282828;
-  color: #ffffff;
+  border: 1px solid var(--border-color);
+  background-color: var(--surface-2);
+  color: var(--text-primary);
   font-size: 1rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.import-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.3);
 }
 
 .import-button {
-  padding: 12px 25px;
+  padding: 14px 30px;
   border-radius: 50px;
   border: none;
-  background-color: #1DB954;
-  color: #ffffff;
-  font-weight: bold;
+  background-color: var(--primary);
+  color: var(--text-primary);
+  font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease-in-out;
+  transform: scale(1);
 }
 
 .import-button:hover {
-  background-color: #1ed760;
+  background-color: var(--primary-hover);
+  transform: scale(1.05);
 }
 
-/* Container de Cards */
+/* --- Grid de Cards de Álbuns --- */
 .cards-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
-  justify-content: center;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
 }
 
-/* Card Individual */
+/* --- Card Individual com Efeitos Sutis --- */
 .card {
-  background-color: #181818;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  background-color: var(--surface-1);
+  border-radius: 12px;
   overflow: hidden;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative; /* Para o efeito de brilho */
 }
 
 .card:hover {
-  background-color: #282828;
+  background-color: var(--surface-2);
+  transform: translateY(-8px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
 }
 
 .card-image {
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
+  display: block; /* Remove espaço extra abaixo da imagem */
 }
 
 .card-content {
-  padding: 15px;
+  padding: 16px;
 }
 
 .card-title {
-  font-size: 1.1rem;
-  margin: 0 0 5px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 4px 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.card-artist {
-  font-size: 0.9rem;
-  color: #b3b3b3;
-  margin: 0 0 10px 0;
+.card-artist, .card-date {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0;
 }
 
-.card-date {
-  font-size: 0.8rem;
-  color: #b3b3b3;
+/* --- Tela de Detalhes do Álbum --- */
+.album-detail-view {
+  background: linear-gradient(180deg, var(--surface-2) 0%, var(--background) 300px);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.back-button {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 10px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  margin-bottom: 24px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.back-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: var(--text-secondary);
+}
+
+.album-header {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.album-header img {
+  width: 200px;
+  height: 200px;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.album-info h2 {
+  margin: 0 0 8px 0;
+  font-size: 3.5rem;
+  font-weight: 700;
+  letter-spacing: -2px;
+}
+.album-info h3, .album-info p {
   margin: 0;
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+/* --- Seção de Avaliações --- */
+.scores-section h3 {
+  font-size: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.score-form {
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 24px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.form-group input[type="range"] {
+  width: 100%;
+}
+.form-group textarea {
+  width: calc(100% - 24px);
+  background-color: var(--surface-1);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--text-primary);
+  padding: 12px;
+  resize: vertical;
+  min-height: 80px;
+  font-family: 'Inter', sans-serif;
+}
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.3);
+}
+
+.score-form button {
+  padding: 12px 24px;
+  border-radius: 50px;
+  border: none;
+  background-color: var(--primary);
+  color: var(--text-primary);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.score-form button:hover {
+  background-color: var(--primary-hover);
+  transform: scale(1.05);
+}
+
+.scores-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.score-item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 16px;
+  background-color: var(--surface-1);
+  border-radius: 8px;
+}
+
+.score-value {
+  background-color: var(--primary);
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.score-content p {
+  margin: 0 0 8px 0;
+  line-height: 1.5;
+}
+.score-content strong {
+  color: var(--text-primary);
+}
+.score-content small {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+/* Adicione isso ao final de src/App.css */
+
+/* Página de Login */
+.login-container {
+  text-align: center;
+  margin-top: 100px;
+}
+
+.login-button {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 14px 30px;
+  background-color: var(--primary);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-weight: 700;
+  border-radius: 50px;
+  transition: all 0.2s ease;
+}
+
+.login-button:hover {
+  background-color: var(--primary-hover);
+  transform: scale(1.05);
+}
+
+/* Header com info do usuário */
+.App-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logout-button {
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logout-button:hover {
+  color: var(--text-primary);
+  border-color: var(--text-primary);
 }
