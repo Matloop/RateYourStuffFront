@@ -28,96 +28,151 @@ body {
 }
 
 .App-header {
-  text-align: center;
-  margin-bottom: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
 }
 
 .App-header h1 {
-  font-size: 3rem;
+  font-size: 2.5rem;
   font-weight: 700;
-  letter-spacing: -1.5px;
   color: var(--primary);
   margin: 0;
 }
 
-/* --- Formulário de Importação com Estilo --- */
-.import-form {
+/* --- Barra de Busca --- */
+.search-form {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 60px;
-  gap: 12px;
+  margin-bottom: 20px;
+  gap: 10px;
 }
-
-.import-input {
+.search-input {
   flex-grow: 1;
-  max-width: 600px;
-  padding: 14px 20px;
+  padding: 12px 18px;
   border-radius: 50px;
   border: 1px solid var(--border-color);
   background-color: var(--surface-2);
   color: var(--text-primary);
   font-size: 1rem;
-  transition: all 0.2s ease-in-out;
 }
-
-.import-input:focus {
+.search-input:focus {
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.3);
 }
-
-.import-button {
-  padding: 14px 30px;
+.search-button {
+  padding: 12px 24px;
   border-radius: 50px;
   border: none;
   background-color: var(--primary);
   color: var(--text-primary);
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  transform: scale(1);
+  transition: all 0.2s ease;
 }
-
-.import-button:hover {
+.search-button:hover {
   background-color: var(--primary-hover);
-  transform: scale(1.05);
 }
 
-/* --- Grid de Cards de Álbuns --- */
+/* --- Lista de Resultados da Busca --- */
+.search-results {
+  margin-bottom: 40px;
+}
+.search-results ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.search-results li {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: var(--surface-1);
+  padding: 10px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+.search-results li:hover {
+  background-color: var(--surface-2);
+}
+.search-results img {
+  width: 50px;
+  height: 50px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.result-info {
+  flex-grow: 1;
+  min-width: 0; /* Impede que o texto empurre o botão para fora */
+}
+.result-info strong {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.result-info span {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+.import-result-button {
+  background: none;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  padding: 8px 12px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+.import-result-button:hover {
+  background-color: var(--primary);
+  color: var(--text-primary);
+}
+
+/* --- Divisor --- */
+.divider {
+  border: none;
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 40px 0;
+}
+
+/* --- Grid de Cards da Coleção --- */
 .cards-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 24px;
 }
 
-/* --- Card Individual com Efeitos Sutis --- */
+/* Card Individual */
 .card {
   background-color: var(--surface-1);
   border-radius: 12px;
   overflow: hidden;
   transition: all 0.3s ease;
   cursor: pointer;
-  position: relative; /* Para o efeito de brilho */
+  position: relative;
 }
-
 .card:hover {
   background-color: var(--surface-2);
   transform: translateY(-8px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
 }
-
 .card-image {
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
-  display: block; /* Remove espaço extra abaixo da imagem */
+  display: block;
 }
-
 .card-content {
   padding: 16px;
 }
-
 .card-title {
   font-size: 1rem;
   font-weight: 600;
@@ -126,7 +181,6 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 .card-artist, .card-date {
   font-size: 0.875rem;
   color: var(--text-secondary);
@@ -155,7 +209,6 @@ body {
   gap: 8px;
   transition: all 0.2s ease;
 }
-
 .back-button:hover {
   background-color: rgba(255, 255, 255, 0.1);
   border-color: var(--text-secondary);
@@ -167,14 +220,12 @@ body {
   align-items: center;
   margin-bottom: 40px;
 }
-
 .album-header img {
   width: 200px;
   height: 200px;
   border-radius: 8px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
-
 .album-info h2 {
   margin: 0 0 8px 0;
   font-size: 3.5rem;
@@ -201,7 +252,6 @@ body {
   border-radius: 8px;
   margin-bottom: 30px;
 }
-
 .form-group {
   margin-bottom: 16px;
 }
@@ -230,7 +280,6 @@ body {
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.3);
 }
-
 .score-form button {
   padding: 12px 24px;
   border-radius: 50px;
@@ -241,7 +290,6 @@ body {
   cursor: pointer;
   transition: all 0.2s ease;
 }
-
 .score-form button:hover {
   background-color: var(--primary-hover);
   transform: scale(1.05);
@@ -252,7 +300,6 @@ body {
   flex-direction: column;
   gap: 16px;
 }
-
 .score-item {
   display: flex;
   gap: 16px;
@@ -261,7 +308,6 @@ body {
   background-color: var(--surface-1);
   border-radius: 8px;
 }
-
 .score-value {
   background-color: var(--primary);
   flex-shrink: 0;
@@ -275,7 +321,6 @@ body {
   font-weight: 700;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
-
 .score-content p {
   margin: 0 0 8px 0;
   line-height: 1.5;
@@ -287,14 +332,22 @@ body {
   color: var(--text-secondary);
   font-size: 0.8rem;
 }
-/* Adicione isso ao final de src/App.css */
+
+.rated-message {
+  background-color: var(--surface-2);
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border: 1px dashed var(--border-color);
+}
 
 /* Página de Login */
 .login-container {
   text-align: center;
   margin-top: 100px;
 }
-
 .login-button {
   display: inline-block;
   margin-top: 20px;
@@ -306,25 +359,17 @@ body {
   border-radius: 50px;
   transition: all 0.2s ease;
 }
-
 .login-button:hover {
   background-color: var(--primary-hover);
   transform: scale(1.05);
 }
 
 /* Header com info do usuário */
-.App-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .user-info {
   display: flex;
   align-items: center;
   gap: 15px;
 }
-
 .logout-button {
   background: none;
   border: 1px solid var(--border-color);
@@ -335,7 +380,6 @@ body {
   cursor: pointer;
   transition: all 0.2s ease;
 }
-
 .logout-button:hover {
   color: var(--text-primary);
   border-color: var(--text-primary);
