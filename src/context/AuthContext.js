@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { jwtDecode } from 'jwt-decode'; // Você precisará instalar esta biblioteca
+import { jwtDecode } from 'jwt-decode'; // Instale com: npm install jwt-decode
 
 const AuthContext = createContext(null);
 
@@ -8,14 +8,13 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Quando o token muda, decodifica para obter os dados do usuário
     if (token) {
       try {
         const decodedUser = jwtDecode(token);
         setUser({
           name: decodedUser.name,
-          email: decodedUser.sub, // 'sub' é o campo padrão para o subject (email)
-          id: decodedUser.userId
+          email: decodedUser.sub, 
+          id: decodedUser.userId 
         });
         localStorage.setItem('jwt_token', token);
       } catch (error) {
@@ -43,7 +42,6 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// Hook customizado para facilitar o uso do contexto
 export const useAuth = () => {
   return useContext(AuthContext);
 };

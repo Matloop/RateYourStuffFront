@@ -1,89 +1,105 @@
 import React, { useState, useEffect } from 'react';
 import apiClient from '../api/axiosConfig';
+import { toast } from 'react-toastify';
+
 import AlbumList from './AlbumList';
 import AlbumDetail from './AlbumDetail';
-import SearchBar from './SearchBar'; // Componente para a barra de busca
-import SearchResults from './SearchResults'; // Componente para exibir os resultados
+import SearchBar from './SearchBar';
+import SearchResults from './SearchResults';
 
 const Dashboard = () => {
-  // Estado para os álbuns salvos na sua coleção
   const [albums, setAlbums] = useState([]);
-  // Estado para o álbum selecionado para ver os detalhes
   const [selectedAlbum, setSelectedAlbum] = useState(null);
-  // Estado para os resultados da busca da API do Spotify
   const [searchResults, setSearchResults] = useState([]);
-  // Estado para mostrar um feedback de "carregando" durante a busca
   const [isSearching, setIsSearching] = useState(false);
 
-  // Função para buscar os álbuns da sua coleção pessoal
+  // Função para buscar os álbuns da coleção do usuário no seu backend
   const fetchAlbums = async () => {
     try {
       const response = await apiClient.get('/albums');
       setAlbums(response.data);
     } catch (error) {
       console.error('Erro ao buscar álbuns da coleção:', error);
+      toast.error('Não foi possível carregar sua coleção.');
     }
   };
 
-  // Busca a coleção inicial quando o componente é montado
+  // Executa fetchAlbums() uma vez quando o componente é montado
   useEffect(() => {
     fetchAlbums();
   }, []);
 
-  // Função chamada pelo SearchBar quando o usuário faz uma busca
+  // Função que é passada para o SearchBar e chamada no 'submit' do formulário
   const handleSearch = async (query) => {
+    console.log(`Iniciando busca no Dashboard com o termo: "${query}"`); // Ponto de depuração
     setIsSearching(true);
-    setSearchResults([]); // Limpa resultados antigos
+    setSearchResults([]); // Limpa resultados anteriores
+    
     try {
       const response = await apiClient.get(`/search/albums?q=${query}`);
-      setSearchResults(response.data);
+      
+      if (response.data && response.data.length > 0) {
+        setSearchResults(response.data);
+      } else {
+        toast.info("Nenhum resultado encontrado para sua busca.");
+      }
     } catch (error) {
-      console.error("Erro na busca:", error);
-      alert("Falha ao buscar álbuns.");
+      console.error("Erro na busca de álbuns:", error);
+      toast.error("Falha ao buscar álbuns. Verifique o console.");
     } finally {
-      setIsSearching(false); // Termina o estado de "buscando"
+      setIsSearching(false);
     }
   };
   
-  // Função chamada pelo SearchResults quando o usuário clica em "+ Importar"
-  // Reutiliza o endpoint de importação que já tínhamos
+  // Função para importar um álbum a partir dos resultados da busca
   const handleImportFromSearch = async (spotifyId) => {
-    // Verifica se o álbum já foi importado para evitar duplicatas
     if (albums.some(album => album.spotifyId === spotifyId)) {
-      alert("Este álbum já está na sua coleção.");
+      toast.warn("Este álbum já está na sua coleção.");
       return;
     }
     
+    const importToastId = toast.loading("Importando álbum...");
     try {
-      alert(`Importando álbum...`);
       await apiClient.post(`/import/albums/${spotifyId}`);
-      alert('Álbum importado com sucesso!');
-      setSearchResults([]); // Limpa os resultados da busca após importar
-      fetchAlbums(); // Atualiza a lista de álbuns da sua coleção
+      toast.update(importToastId, { 
+        render: "Álbum importado com sucesso!", 
+        type: "success", 
+        isLoading: false, 
+        autoClose: 3000 
+      });
+      setSearchResults([]);
+      fetchAlbums();
     } catch (error) {
       console.error('Erro ao importar álbum:', error);
-      alert("Falha ao importar o álbum.");
+      toast.update(importToastId, { 
+        render: "Falha ao importar o álbum.", 
+        type: "error", 
+        isLoading: false, 
+        autoClose: 5000 
+      });
     }
   };
 
-  // Se um álbum está selecionado, mostra a tela de detalhes
+  // Se um álbum for selecionado, renderiza a tela de detalhes
   if (selectedAlbum) {
     return <AlbumDetail album={selectedAlbum} onBack={() => setSelectedAlbum(null)} />;
   }
 
-  // Senão, mostra a tela principal do Dashboard
+  // Renderização principal do Dashboard
   return (
     <>
+      {/* O SearchBar recebe a função handleSearch via prop onSearch */}
       <SearchBar onSearch={handleSearch} />
       
       {isSearching && <p>Buscando...</p>}
       
+      {/* SearchResults recebe os resultados e a função de importar */}
       <SearchResults results={searchResults} onImport={handleImportFromSearch} />
       
-      {/* Adiciona um divisor visual se houver resultados de busca */}
       {searchResults.length > 0 && <hr className="divider" />}
 
       <h3>Sua Coleção</h3>
+      {/* AlbumList recebe os álbuns da coleção e a função para selecionar um */}
       <AlbumList albums={albums} onAlbumSelect={setSelectedAlbum} />
     </>
   );

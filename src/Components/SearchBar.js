@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 
-const SearchBar = ({ onSearch }) => {
+const SearchBar = ({ onSearch }) => { // 1. Recebe 'onSearch' como prop
   const [query, setQuery] = useState('');
 
   const handleSearch = (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Impede o recarregamento da página
     if (query.trim()) {
-      onSearch(query);
+      onSearch(query); // 2. Chama a função recebida com o texto da busca
     }
   };
 
   return (
-    <form onSubmit={handleSearch} className="search-form">
+    // 3. O formulário chama 'handleSearch' no evento onSubmit
+    <form onSubmit={handleSearch} className="search-form"> 
       <input
         type="text"
         value={query}

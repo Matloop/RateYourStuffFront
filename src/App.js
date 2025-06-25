@@ -1,13 +1,14 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth, AuthProvider } from './context/AuthContext';
-import apiClient from './api/axiosConfig'; // Importamos nosso cliente axios configurado
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; 
 
 // Importe seus componentes de página/autenticação
-import Dashboard from './Components/Dashboard'; // Criaremos este componente
+import Dashboard from './Components/Dashboard'; 
 import Login from './Components/Login';
 import AuthCallback from './Components/AuthCallback';
-import './App.css'; // Mantenha seu CSS incrível
+import './App.css'; 
 
 // Um componente wrapper para proteger rotas
 const PrivateRoute = ({ children }) => {
@@ -15,17 +16,19 @@ const PrivateRoute = ({ children }) => {
   return token ? children : <Navigate to="/login" />;
 };
 
-// O componente App principal
+// O componente App principal com o conteúdo
 function AppContent() {
-  const { user, logout } = useAuth();
+  const { user, logout } = useAuth(); // Pegamos a função logout do nosso contexto
 
   return (
     <div className="App">
       <header className="App-header">
         <h1>Rate Your Stuff</h1>
+        {/* Renderiza as informações do usuário e o botão de logout apenas se o usuário estiver logado */}
         {user && (
           <div className="user-info">
             <span>Olá, {user.name}</span>
+            {/* BOTÃO DE LOGOUT ADICIONADO AQUI */}
             <button onClick={logout} className="logout-button">Sair</button>
           </div>
         )}
@@ -54,6 +57,18 @@ function App() {
     <Router>
       <AuthProvider>
         <AppContent />
+        <ToastContainer
+          position="bottom-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
       </AuthProvider>
     </Router>
   );
