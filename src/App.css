@@ -41,7 +41,30 @@ body {
   margin: 0;
 }
 
-/* --- Barra de Busca --- */
+/* --- Barra de Busca e Ações --- */
+.dashboard-actions {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.import-link-button {
+  background-color: var(--primary);
+  color: var(--text-primary);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.import-link-button:hover {
+  background-color: var(--primary-hover);
+  transform: scale(1.05);
+}
+
 .search-form {
   display: flex;
   margin-bottom: 20px;
@@ -107,7 +130,7 @@ body {
 }
 .result-info {
   flex-grow: 1;
-  min-width: 0; /* Impede que o texto empurre o botão para fora */
+  min-width: 0;
 }
 .result-info strong {
   display: block;
@@ -383,4 +406,187 @@ body {
 .logout-button:hover {
   color: var(--text-primary);
   border-color: var(--text-primary);
+}
+
+
+/* --- Modal de Importação por URL (NOVOS ESTILOS) --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: var(--surface-2);
+  padding: 25px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 15px;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 2.25rem;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.close-button:hover {
+  color: var(--text-primary);
+}
+
+.modal-body p {
+  color: var(--text-secondary);
+  margin-top: 0;
+}
+
+.modal-body .url-input {
+  /* Reutilizando o estilo do .search-input para consistência */
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 18px;
+  border-radius: 50px;
+  border: 1px solid var(--border-color);
+  background-color: var(--surface-1); /* Um pouco mais claro que o fundo do modal */
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+.modal-body .url-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.3);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+.modal-footer button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.cancel-button {
+  background-color: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+.cancel-button:hover {
+  color: var(--text-primary);
+  border-color: var(--text-primary);
+}
+
+.confirm-button {
+  /* Reutilizando o estilo dos botões primários */
+  background-color: var(--primary);
+  color: var(--text-primary);
+}
+.confirm-button:hover {
+  background-color: var(--primary-hover);
+  transform: scale(1.05);
+}
+.confirm-button:disabled {
+  background-color: #535353;
+  color: #a7a7a7;
+  cursor: not-allowed;
+  transform: none;
+}
+/* --- NOVO: Painel de Importação por URL --- */
+
+.url-import-panel {
+  background: var(--surface-1);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 0 20px; /* Padding lateral, o vertical será animado */
+  margin-bottom: 20px;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+
+  /* Propriedades para a animação de "acordeão" */
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: all 0.4s ease-in-out;
+}
+
+/* Classe 'visible' que será adicionada via JS para ativar a animação */
+.url-import-panel.visible {
+  max-height: 100px; /* Altura máxima suficiente para o conteúdo */
+  opacity: 1;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.url-import-panel .url-input {
+  flex-grow: 1;
+  padding: 12px 18px;
+  border-radius: 50px;
+  border: 1px solid var(--border-color);
+  background-color: var(--surface-2);
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.url-import-panel .url-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.3);
+}
+
+.url-import-panel .confirm-button {
+  flex-shrink: 0; /* Impede que o botão encolha */
+  padding: 12px 24px;
+  border-radius: 50px;
+  border: none;
+  background-color: var(--primary);
+  color: var(--text-primary);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.url-import-panel .confirm-button:hover {
+  background-color: var(--primary-hover);
+}
+
+.url-import-panel .confirm-button:disabled {
+  background-color: #535353;
+  color: #a7a7a7;
+  cursor: not-allowed;
 }
