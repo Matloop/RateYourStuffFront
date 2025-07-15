@@ -1,23 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
+import React, { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 
-// O formulário agora recebe a avaliação existente do usuário como uma prop opcional
-const ScoreForm = ({ albumSpotifyId, onSubmit, existingScore }) => {
+// Este formulário agora é a única fonte da verdade para os dados da avaliação.
+const ScoreForm = ({ mediaApiId, onSubmit }) => {
   const [value, setValue] = useState(50);
   const [reviewText, setReviewText] = useState('');
   const { user } = useAuth();
-
-  // useEffect para preencher o formulário se uma avaliação já existir
-  useEffect(() => {
-    if (existingScore) {
-      setValue(existingScore.value);
-      setReviewText(existingScore.reviewText || '');
-    } else {
-      // Reseta o formulário se não houver avaliação (ex: ao navegar para outro álbum)
-      setValue(50);
-      setReviewText('');
-    }
-  }, [existingScore]); // Executa sempre que a avaliação existente mudar
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -26,28 +14,25 @@ const ScoreForm = ({ albumSpotifyId, onSubmit, existingScore }) => {
       return;
     }
     
+    // ===== CORREÇÃO DEFINITIVA =====
+    // O objeto de dados agora corresponde EXATAMENTE ao DTO do backend.
     const scoreData = {
       value: parseInt(value, 10),
       reviewText,
-      spotifyAlbumId: albumSpotifyId,
       userId: user.id,
+      spotifyAlbumId: mediaApiId, // Renomeia a prop 'mediaApiId' para o campo 'spotifyAlbumId'
     };
     
     onSubmit(scoreData);
+    
+    // Limpa o formulário após o envio
+    setValue(50);
+    setReviewText('');
   };
-
-  // Decide se estamos no modo de edição
-  const isEditing = !!existingScore;
 
   return (
     <form onSubmit={handleSubmit} className="score-form">
-      <h4>{isEditing ? "Edite sua avaliação" : "Adicionar sua avaliação"}</h4>
-      
-      {/* Se o usuário já avaliou, mostra uma mensagem diferente */}
-      {isEditing && (
-        <p className="rated-message">Você já avaliou este álbum. Altere abaixo e clique em "Atualizar".</p>
-      )}
-
+      <h4>Adicionar sua avaliação</h4>
       <div className="form-group">
         <label htmlFor="score-value">Nota (0-100): {value}</label>
         <input
@@ -68,8 +53,7 @@ const ScoreForm = ({ albumSpotifyId, onSubmit, existingScore }) => {
           onChange={(e) => setReviewText(e.target.value)}
         />
       </div>
-      {/* O texto do botão muda dinamicamente */}
-      <button type="submit">{isEditing ? "Atualizar Avaliação" : "Enviar Avaliação"}</button>
+      <button type="submit">Enviar Avaliação</button>
     </form>
   );
 };

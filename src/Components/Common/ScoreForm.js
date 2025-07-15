@@ -1,56 +1,87 @@
+// Arquivo: src/components/Common/ScoreForm.js (VERSÃO CORRIGIDA)
+
 import React, { useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
 
 const ScoreForm = ({ mediaApiId, onSubmit }) => {
-  const [value, setValue] = useState(50);
+  const [value, setValue] = useState('');
   const [reviewText, setReviewText] = useState('');
-  const { user } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  // Log para debug - verificar se o mediaApiId está chegando corretamente
+  console.log('[DEBUG ScoreForm] mediaApiId recebido:', mediaApiId);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!user) {
-      alert("Você precisa estar logado para avaliar.");
+    
+    if (!mediaApiId) {
+      console.error('[ScoreForm] mediaApiId está undefined/null');
       return;
     }
-    
-    // Objeto de dados genérico para a avaliação
+
+    if (!value || value < 0 || value > 100) {
+      alert('Por favor, insira uma nota entre 0 e 100');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    // Preparar os dados no formato que o backend espera
     const scoreData = {
-      value: parseInt(value, 10),
-      reviewText,
-      mediaApiId: mediaApiId, // ID genérico da mídia
-      userId: user.id,
+      value: parseInt(value), // Converter para inteiro
+      reviewText: reviewText || '', // Se vazio, enviar string vazia
+      userId: 1, // TODO: Pegar do contexto de autenticação
+      spotifyAlbumId: mediaApiId // CORRIGIDO: usar o nome correto do campo
     };
-    
-    onSubmit(scoreData);
-    // Limpa o formulário após o envio
-    setValue(50);
-    setReviewText('');
+
+    console.log('[DEBUG ScoreForm] Enviando dados:', scoreData);
+
+    try {
+      await onSubmit(scoreData);
+      // Limpar o formulário após sucesso
+      setValue('');
+      setReviewText('');
+    } catch (error) {
+      console.error('[ScoreForm] Erro ao enviar:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="score-form">
-      <h4>Adicionar sua avaliação</h4>
       <div className="form-group">
-        <label htmlFor="score-value">Nota (0-100): {value}</label>
+        <label htmlFor="score-value">Nota (0-100):</label>
         <input
           id="score-value"
-          type="range"
+          type="number"
           min="0"
           max="100"
           value={value}
           onChange={(e) => setValue(e.target.value)}
+          required
+          disabled={isSubmitting}
         />
       </div>
+      
       <div className="form-group">
         <label htmlFor="review-text">Comentário (opcional):</label>
         <textarea
           id="review-text"
-          rows="3"
           value={reviewText}
           onChange={(e) => setReviewText(e.target.value)}
+          rows="3"
+          disabled={isSubmitting}
+          placeholder="Escreva sua opinião sobre este álbum..."
         />
       </div>
-      <button type="submit">Enviar Avaliação</button>
+      
+      <button 
+        type="submit" 
+        disabled={isSubmitting || !value}
+        className="submit-button"
+      >
+        {isSubmitting ? 'Enviando...' : 'Enviar Avaliação'}
+      </button>
     </form>
   );
 };
